@@ -26,7 +26,7 @@ then(() => {
 const init = async () => {
   // await models.User.sync();
   // await models.Page.sync();
-  await models.db.sync({force: true});
+  await models.db.sync({force: false});
 
 
   app.listen(PORT, () => {
