@@ -10,6 +10,7 @@
   "author": "David \"The Hawk\" Hochbaum, Michael \"Mike the Impaler\" Cheung",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "html-template-tag": "^3.1.0",
     "morgan": "^1.9.1",
     "pg": "^7.12.0",

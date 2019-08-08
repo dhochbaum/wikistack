@@ -1,22 +1,22 @@
 const PORT = 3000;
-const express = require("express");
-const morgan = require("morgan");
+const express = require('express');
+const morgan = require('morgan');
 const app = express();
 const { db } = require('./models');
 const models = require('./models');
+//const userRouter = require('./routes/user');
+//const wikiRouter = require('./routes/wiki');
 
 // parses url-encoded bodies
-app.use(express.urlencoded({ extended: false }));
-
 app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
+app.use('/wiki', require('./routes/wiki'));
+app.use('/user', require('./routes/user'));
 
 app.get("/", (req, res) => {
-    res.send("hello world");
+    res.redirect('/wiki');
 })
-
-
-
 
 db.authenticate().
 then(() => {
@@ -35,6 +35,3 @@ const init = async () => {
 }
 
 init();
-
-
-
