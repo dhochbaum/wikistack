@@ -6,7 +6,7 @@ const Page = db.define("page", {
       type: Sequelize.STRING,
       allowNull: false
   },
-  slug: {
+  slug: { 
     type: Sequelize.STRING,
     allowNull: false
   },  
@@ -20,7 +20,7 @@ const Page = db.define("page", {
 });
 
 Page.beforeCreate((pageInstance) => {
-  pageInstance.slug = generateSlug(pageInstance.slug)
+  pageInstance.slug = generateSlug(pageInstance.title)
 });
 
 const User = db.define("user", {
@@ -42,6 +42,8 @@ function generateSlug (title) {
   // And make whitespace underscore
   return title.replace(/\s+/g, '_').replace(/\W/g, '');
 }
+
+Page.belongsTo(User, { as: 'author' });
 
 module.exports = {
   db,
