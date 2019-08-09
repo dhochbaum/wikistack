@@ -7,8 +7,7 @@ const { main } = require('../views');
 const { User } = require('../models');
 
 //const wikipage = require('../views/wikiPage');
-console.log('aaaaaaaaaaaaaa')
-console.log(wikiPage)
+
 
 
 router.get('/', async (req, res, next) => {
@@ -28,8 +27,10 @@ router.get('/:slug', async (req, res, next) => {
         const wikiPageInfo = await Page.findOne({
             where: { slug: req.params.slug }
           })      
+        const wikiUserInfo = await wikiPageInfo.getAuthor();
+        //console.log(wikiUserInfo)
           //console.log(wikiPage)
-        res.send(wikiPage(wikiPageInfo, 'The Best Author of Wikipages EVARRRR!!!!!!1!!'));
+        res.send(wikiPage(wikiPageInfo, wikiUserInfo));
     } catch (error) { next(error) }
     
   });
@@ -38,12 +39,12 @@ router.get('/:slug', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     //res.json(req.body);
     //const slug = req.body.title.replace(' ', '-').toLowerCase();
-    const authorInfo = await User.findOrCreate({
+    const [user, wasCreated] = await User.findOrCreate({
         where: { name: req.body.name },
-        defaults: {email: req.body.email}
+        defaults: { email: req.body.email }
     })
 
-
+/*
 
     if (authorInfo === null){
         const author = new User({
@@ -55,7 +56,7 @@ router.post('/', async (req, res, next) => {
             await author.save();
         } catch (error) {next(error)}
     }
-
+*/
     const page = new Page({
         title: req.body.title,
         content: req.body.content,
@@ -65,6 +66,7 @@ router.post('/', async (req, res, next) => {
     
     try {
         await page.save();
+        page.setAuthor(user);
         res.redirect(`/wiki/${page.slug}`);
       } catch (error) { next(error) }
 })
